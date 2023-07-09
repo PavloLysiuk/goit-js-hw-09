@@ -6,13 +6,32 @@
 const selectors = {
   startBtn: document.querySelector('button[data-start]'),
   stopBtn: document.querySelector('button[data-stop]'),
-  body: document.querySelector('body')
+  body: document.querySelector('body'),
+};
+
+selectors.startBtn.addEventListener('click', onClickStartBtn);
+selectors.stopBtn.setAttribute('disabled', '');
+
+let timer;
+
+function onClickStartBtn() {
+  timer = setInterval(
+    () => (selectors.body.style.backgroundColor = getRandomHexColor()),
+    1000
+  );
+  selectors.startBtn.setAttribute('disabled', '');
+  selectors.stopBtn.removeAttribute('disabled');
+  selectors.stopBtn.addEventListener('click', onClickStopBtn);
 }
 
-// selectors.startBtn.addEventListener('click', onClickStart);
-// selectors.stopBtn.setAttribute('disabled', '');
-
+function onClickStopBtn() {
+  clearInterval(timer);
+  selectors.startBtn.removeAttribute('disabled');
+  selectors.stopBtn.setAttribute('disabled', '');
+}
 
 function getRandomHexColor() {
-  return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, 0)}`;
+  return `#${Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, 0)}`;
 }
