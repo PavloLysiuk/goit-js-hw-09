@@ -15,6 +15,7 @@ selectors.stopBtn.setAttribute('disabled', '');
 let timer;
 
 function onClickStartBtn() {
+  selectors.body.style.backgroundColor = getRandomHexColor();
   timer = setInterval(
     () => (selectors.body.style.backgroundColor = getRandomHexColor()),
     1000
