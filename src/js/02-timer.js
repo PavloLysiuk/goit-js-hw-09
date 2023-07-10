@@ -71,28 +71,25 @@ selectors.startBtn.disabled = true;
 
 function dateInFuture(time) {
   if (time < 0) {
+    selectors.startBtn.disabled = true;
     Notify.failure('Please choose a date in the future', {
       width: '380px',
       position: 'center-top',
       fontSize: '18px',
     });
   } else {
-    enableStartBtn();
+    selectors.startBtn.disabled = false;
   }
 }
 
-function enableStartBtn() {
-  selectors.startBtn.disabled = false;
-  // selectors.startBtn.document.querySelector('click', onClickStartBtn);
-}
+// function enableStartBtn() {
+//   selectors.startBtn.disabled = false;
+//   selectors.startBtn.document.querySelector('click', onClickStartBtn);
+// }
 
 // function onClickStartBtn(e) {
 //   selectors.startBtn.disabled = false;
 // }
-
-
-
-
 
 function addLeadingZero(value) {
   const keys = Object.keys(value);
