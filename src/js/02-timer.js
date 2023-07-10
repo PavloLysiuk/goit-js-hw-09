@@ -53,6 +53,8 @@ const selectors = {
   seconds: document.querySelector('span[data-seconds]'),
 };
 
+selectors.startBtn.addEventListener('click', onClickStartBtn, { once: true });
+
 let timerTime = 0;
 
 const options = {
@@ -80,6 +82,10 @@ function dateInFuture(time) {
   } else {
     selectors.startBtn.disabled = false;
   }
+}
+
+function onClickStartBtn() {
+  selectors.startBtn.disabled = true;
 }
 
 // function enableStartBtn() {
