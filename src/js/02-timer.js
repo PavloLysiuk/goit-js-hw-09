@@ -66,7 +66,7 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     timeMS = Date.parse(selectedDates[0]) - Date.parse(this.defaultDate);
-    // function dateInFuture(time);
+    dateInFuture(timeMS);
   },
 };
 
@@ -75,29 +75,24 @@ selectors.startBtn.disabled = true;
 
 function dateInFuture(time) {
   if (time < 0) {
-    Notiflix.Notify.failure('Qui timide rogat docet negare');
+    Notify.failure('Please choose a date in the future', {
+      width: '350px',
+      position: 'left-top',
+      fontSize: '12px',
+    });
+  } else {
+    enableStartBtn();
   }
-  selectors.startBtn.disabled = false;
 }
 
+function enableStartBtn() {
+  selectors.startBtn.disabled = false;
+  // selectors.startBtn.document.querySelector('click', onClickStartBtn);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// function onClickStartBtn(e) {
+//   selectors.startBtn.disabled = false;
+// }
 
 
 
