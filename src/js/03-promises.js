@@ -21,8 +21,19 @@
 
 // Для відображення повідомлень користувачеві, замість console.log(), використовуй бібліотеку notiflix.
 
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
+const selectors = {
+  form: document.querySelector('.form'),
+  input: document.querySelector('input'),
+  createPromisesBtn: document.querySelector('button[type="submit"]'),
+};
 
+selectors.createPromisesBtn.addEventListener('click', onClickCreatePromisesBtn);
+
+function onClickCreatePromisesBtn(e) {
+  e.preventDefault();
+}
 
 
 
