@@ -74,7 +74,7 @@ let inputFP = flatpickr(selectors.picker, options);
 selectors.startBtn.disabled = true;
 
 function dateInFuture(time) {
-  if (time < 0) {
+  if (time <= 0) {
     selectors.startBtn.disabled = true;
     Notify.failure('Please choose a date in the future', {
       width: '380px',
