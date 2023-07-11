@@ -20,12 +20,12 @@
 // Якщо користувач вибрав дату в минулому, покажи window.alert() з текстом "Please choose a date in the future".
 // Якщо користувач вибрав валідну дату (в майбутньому), кнопка «Start» стає активною.
 // Кнопка «Start» повинна бути неактивною доти, доки користувач не вибрав дату в майбутньому.
-//* Натисканням на кнопку «Start» починається відлік часу до обраної дати з моменту натискання.
-//* Відлік часу
-//* Натисканням на кнопку «Start» скрипт повинен обчислювати раз на секунду, скільки часу залишилось до вказаної дати, і оновлювати інтерфейс таймера, показуючи чотири цифри: дні, години, хвилини і секунди у форматі xx:xx:xx:xx.
+// Натисканням на кнопку «Start» починається відлік часу до обраної дати з моменту натискання.
+// Відлік часу
+// Натисканням на кнопку «Start» скрипт повинен обчислювати раз на секунду, скільки часу залишилось до вказаної дати, і оновлювати інтерфейс таймера, показуючи чотири цифри: дні, години, хвилини і секунди у форматі xx:xx:xx:xx.
 
-//* Кількість днів може складатися з більше, ніж двох цифр.
-//* Таймер повинен зупинятися, коли дійшов до кінцевої дати, тобто 00:00:00:00.
+// Кількість днів може складатися з більше, ніж двох цифр.
+// Таймер повинен зупинятися, коли дійшов до кінцевої дати, тобто 00:00:00:00.
 // НЕ БУДЕМО УСКЛАДНЮВАТИ
 // Якщо таймер запущений, для того щоб вибрати нову дату і перезапустити його - необхідно перезавантажити сторінку.
 
@@ -37,7 +37,6 @@
 // Бібліотека повідомлень
 // УВАГА
 // Наступний функціонал не обов'язковий для здавання завдання, але буде хорошою додатковою практикою.
-
 // Для відображення повідомлень користувачеві, замість window.alert(), використовуй бібліотеку notiflix.
 
 import flatpickr from 'flatpickr';
@@ -56,19 +55,22 @@ const selectors = {
 selectors.startBtn.addEventListener('click', onClickStartBtn, { once: true });
 
 let timerTime = 0;
+let timerId = null;
+let userDate = {};
 
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
+  clickOpens: true,
   onClose(selectedDates) {
     timerTime = Date.parse(selectedDates[0]) - Date.parse(options.defaultDate);
     dateInFuture(timerTime);
   },
 };
 
-const inputFP = flatpickr(selectors.picker, options);
+let inputFP = flatpickr(selectors.picker, options);
 selectors.startBtn.disabled = true;
 
 function dateInFuture(time) {
@@ -86,16 +88,43 @@ function dateInFuture(time) {
 
 function onClickStartBtn() {
   selectors.startBtn.disabled = true;
+  handlerTimer(timerTime);
+  updateDataFlatpickr();
+  onCounterTimer();
 }
 
-// function enableStartBtn() {
-//   selectors.startBtn.disabled = false;
-//   selectors.startBtn.document.querySelector('click', onClickStartBtn);
-// }
+function handlerTimer(timerTime) {
+  userDate = convertMs(timerTime);
+  addLeadingZero(userDate);
+  updateTimeRemaining(userDate);
+}
 
-// function onClickStartBtn(e) {
-//   selectors.startBtn.disabled = false;
-// }
+function updateDataFlatpickr() {
+  options.clickOpens = false;
+  inputFP = flatpickr(selectors.picker, options);
+}
+
+function onCounterTimer() {
+  timerId = setInterval(() => {
+    timerTime -= 1000;
+    stopInterval(timerTime, timerId);
+    handlerTimer(timerTime);
+  }, 1000);
+}
+
+function stopInterval(time, timerId) {
+  if (!time) {
+    clearInterval(timerId);
+  }
+}
+
+function updateTimeRemaining(obj) {
+  const { days, hours, minutes, seconds } = obj;
+  selectors.days.textContent = days;
+  selectors.hours.textContent = hours;
+  selectors.minutes.textContent = minutes;
+  selectors.seconds.textContent = seconds;
+}
 
 function addLeadingZero(value) {
   const keys = Object.keys(value);
