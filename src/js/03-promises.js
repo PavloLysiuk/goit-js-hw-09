@@ -7,45 +7,56 @@
 
 // Доповни код функції createPromise таким чином, щоб вона повертала один проміс, який виконується або відхиляється через delay часу. Значенням промісу повинен бути об'єкт, в якому будуть властивості position і delay зі значеннями однойменних параметрів. Використовуй початковий код функції для вибору того, що потрібно зробити з промісом - виконати або відхилити.
 
-// createPromise(2, 1500)
-//   .then(({ position, delay }) => {
-//     console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
-//   })
-//   .catch(({ position, delay }) => {
-//     console.log(`❌ Rejected promise ${position} in ${delay}ms`);
-//   });
-
-// Бібліотека повідомлень
-// УВАГА
-// Наступний функціонал не обов'язковий для здавання завдання, але буде хорошою додатковою практикою.
-
 // Для відображення повідомлень користувачеві, замість console.log(), використовуй бібліотеку notiflix.
 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const selectors = {
   form: document.querySelector('.form'),
-  input: document.querySelector('input'),
-  createPromisesBtn: document.querySelector('button[type="submit"]'),
+  delay: document.querySelector('input[name="delay"]'),
+  step: document.querySelector('input[name="step"]'),
+  amount: document.querySelector('input[name="amount"]'),
 };
 
-selectors.createPromisesBtn.addEventListener('click', onClickCreatePromisesBtn);
+selectors.form.addEventListener('submit', onSubmit);
 
-function onClickCreatePromisesBtn(e) {
-  e.preventDefault();
+function onSubmit(event) {
+  event.preventDefault();
+
+  let delay = parseInt(selectors.delay.value);
+  const step = parseInt(selectors.step.value);
+  const amount = selectors.amount.value;
+
+  for (let i = 1; i <= amount; i += 1) {
+    createPromise(i, delay)
+      .then(({ position, delay }) => {
+        Notify.success(`Fulfilled promise #${position} in ${delay}ms`, {
+          width: '380px',
+          position: 'right-top',
+          fontSize: '18px',
+        });
+      })
+      .catch(({ position, delay }) => {
+        Notify.failure(`Rejected promise #${position} in ${delay}ms`, {
+          width: '380px',
+          position: 'right-top',
+          fontSize: '18px',
+        });
+      });
+
+    delay += step;
+  }
 }
 
-
-
-
-
-
-
 function createPromise(position, delay) {
-  const shouldResolve = Math.random() > 0.3;
-  if (shouldResolve) {
-    // Fulfill
-  } else {
-    // Reject
-  }
+  return new Promise((resolve, reject) => {
+    const shouldResolve = Math.random() > 0.3;
+    setTimeout(() => {
+      if (shouldResolve) {
+        resolve({ position, delay });
+      } else {
+        reject({ position, delay });
+      }
+    }, delay);
+  });
 }
